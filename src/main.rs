@@ -16,15 +16,15 @@ fn predictable_shuffle(cards: &mut [Card], seed: u64) {
 }
 
 fn main() {
+
+    // Create a new deck of cards
     let mut deck = Deck::new();
 
-    predictable_shuffle(deck.mut_cards(), 0);
+    // Shuffle according to random seed
+    // TODO: prompt the user
+    predictable_shuffle(deck.mut_cards(), 42);
 
-    while deck.undealt_count() > 0 {
-        match deck.deal_one() {
-            Ok(v) => println!("{:02} Card: name is '{:?}', short is {}", deck.dealt_count(), v.name(), v.to_str()),
-            Err(e) => println!("{:02} ERROR: {:?}", deck.dealt_count(), e),
-        }
+    for (i, card) in deck.cards().iter().enumerate() {
+        println!("{:02} Card: name is '{:?}', short is {}", i, card.name(), card.to_str());
     }
-
 }
