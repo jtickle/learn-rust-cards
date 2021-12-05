@@ -53,6 +53,17 @@ impl Default for Freecell {
 impl Freecell {
     pub fn new() -> Self { Self::default() }
 
+    pub fn from_deck(deck: &mut Deck) -> Self {
+        let mut board: Self = Self::new();
+        board.deal_from(deck);
+        board
+    }
+
+    pub fn deal_from(&mut self, deck: &mut Deck) {
+        for
+        //TODO loop over deck and deal to fields
+    }
+
     pub fn show_homecell(&self, i: usize) -> Option<String> {
         if self.homecell[i].len() > 0 {
             Some(self.homecell[i].cards[0].to_str().clone())
@@ -66,6 +77,50 @@ impl Freecell {
             Some(x) => Some(x.to_str().clone()),
             None => None,
         }
+    }
+
+    pub fn show_field(&self, i: usize, j: usize) -> Option<String> {
+        if self.field[i].len() > j {
+            Some(self.field[i].cards[j].to_str().clone())
+        } else {
+            None
+        }
+    }
+}
+
+fn print_freecell_board(board: &Freecell) {
+
+    println!("  {} {} {} {}  👑  {} {} {} {}  ", 
+        board.show_homecell(0).unwrap_or(String::from("[]")),
+        board.show_homecell(1).unwrap_or(String::from("[]")),
+        board.show_homecell(2).unwrap_or(String::from("[]")),
+        board.show_homecell(3).unwrap_or(String::from("[]")),
+        board.show_freecell(0).unwrap_or(String::from("[]")),
+        board.show_freecell(1).unwrap_or(String::from("[]")),
+        board.show_freecell(2).unwrap_or(String::from("[]")),
+        board.show_freecell(3).unwrap_or(String::from("[]")),
+    );
+
+    let mut maxlen: usize = 1;
+
+    for i in 0..8 {
+        let l = board.field[i].len();
+        if l > maxlen {
+            maxlen = l
+        }
+    }
+    
+    for i in 0..maxlen {
+        println!(" {}  {}  {}  {}  {}  {}  {}  {} ",
+            board.show_field(0, i).unwrap_or(String::from("  ")),
+            board.show_field(1, i).unwrap_or(String::from("  ")),
+            board.show_field(2, i).unwrap_or(String::from("  ")),
+            board.show_field(3, i).unwrap_or(String::from("  ")),
+            board.show_field(4, i).unwrap_or(String::from("  ")),
+            board.show_field(5, i).unwrap_or(String::from("  ")),
+            board.show_field(6, i).unwrap_or(String::from("  ")),
+            board.show_field(7, i).unwrap_or(String::from("  ")),
+        )
     }
 }
 
@@ -84,15 +139,5 @@ fn main() {
 
     let mut board = Freecell::new();
 
-    println!("  {} {} {} {}  👑  {} {} {} {}  ", 
-        board.show_homecell(0).unwrap_or(String::from("[]")),
-        board.show_homecell(1).unwrap_or(String::from("[]")),
-        board.show_homecell(2).unwrap_or(String::from("[]")),
-        board.show_homecell(3).unwrap_or(String::from("[]")),
-        board.show_freecell(0).unwrap_or(String::from("[]")),
-        board.show_freecell(1).unwrap_or(String::from("[]")),
-        board.show_freecell(2).unwrap_or(String::from("[]")),
-        board.show_freecell(3).unwrap_or(String::from("[]")),
-    );
-    //println!(" {}  {}  {}  {}  {}  {}  {}  {} ")
+    print_freecell_board(&board)
 }
