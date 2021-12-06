@@ -44,7 +44,7 @@ fn show_card(card: &Card) -> String {
     if card.is_hearts() || card.is_diamonds() {
         disp.red().to_string()
     } else {
-        disp
+        disp.black().to_string()
     }
 }
 
@@ -56,17 +56,21 @@ fn card_to_str_or(maybe: Option<Card>, def: &str) -> String{
 }
 
 fn print_freecell_board(board: &Freecell) {
+    
+    println!();
 
-    println!(" {} {} {} {}  👑  {} {} {} {} ", 
-        card_to_str_or(board.get_homecell_topcard(0), "[]"),
-        card_to_str_or(board.get_homecell_topcard(1), "[]"),
-        card_to_str_or(board.get_homecell_topcard(2), "[]"),
-        card_to_str_or(board.get_homecell_topcard(3), "[]"),
-        card_to_str_or(board.get_freecell_card(0), "[]"),
-        card_to_str_or(board.get_freecell_card(1), "[]"),
-        card_to_str_or(board.get_freecell_card(2), "[]"),
-        card_to_str_or(board.get_freecell_card(3), "[]"),
+    let filler = "[]".black().to_string();
+    let line = format!("  {} {} {} {}   👑   {} {} {} {}  ", 
+        card_to_str_or(board.get_homecell_topcard(0), &filler),
+        card_to_str_or(board.get_homecell_topcard(1), &filler),
+        card_to_str_or(board.get_homecell_topcard(2), &filler),
+        card_to_str_or(board.get_homecell_topcard(3), &filler),
+        card_to_str_or(board.get_freecell_card(0), &filler),
+        card_to_str_or(board.get_freecell_card(1), &filler),
+        card_to_str_or(board.get_freecell_card(2), &filler),
+        card_to_str_or(board.get_freecell_card(3), &filler),
     );
+    println!("{}", line.on_green());
 
     let mut maxlen: usize = 1;
 
@@ -78,16 +82,18 @@ fn print_freecell_board(board: &Freecell) {
     }
     
     for i in 0..maxlen {
-        println!(" {}  {}  {}  {}  {}  {}  {}  {} ",
-            card_to_str_or(board.get_field_card_at(0, i), "  "),
-            card_to_str_or(board.get_field_card_at(1, i), "  "),
-            card_to_str_or(board.get_field_card_at(2, i), "  "),
-            card_to_str_or(board.get_field_card_at(3, i), "  "),
-            card_to_str_or(board.get_field_card_at(4, i), "  "),
-            card_to_str_or(board.get_field_card_at(5, i), "  "),
-            card_to_str_or(board.get_field_card_at(6, i), "  "),
-            card_to_str_or(board.get_field_card_at(7, i), "  "),
-        )
+        let filler = "  ".black();
+        let line = format!("  {}  {}  {}  {}  {}  {}  {}  {}  ",
+            card_to_str_or(board.get_field_card_at(0, i), &filler),
+            card_to_str_or(board.get_field_card_at(1, i), &filler),
+            card_to_str_or(board.get_field_card_at(2, i), &filler),
+            card_to_str_or(board.get_field_card_at(3, i), &filler),
+            card_to_str_or(board.get_field_card_at(4, i), &filler),
+            card_to_str_or(board.get_field_card_at(5, i), &filler),
+            card_to_str_or(board.get_field_card_at(6, i), &filler),
+            card_to_str_or(board.get_field_card_at(7, i), &filler),
+        );
+        println!("{}", line.on_green());
     }
 }
 
