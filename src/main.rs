@@ -1,6 +1,9 @@
+mod freecell;
+
 use deckofcards::*;
 use rand::prelude::*;
 use rand_pcg::Pcg64;
+use crate::freecell::*;
 
 // Seedable RNGs... "A simple number" looks pretty good
 // https://rust-random.github.io/book/guide-seeding.html
@@ -13,100 +16,6 @@ fn predictable_shuffle(cards: &mut [Card], seed: u64) {
     for n in 0..l {
         let i = rng.gen_range(0..(l - n));
         cards.swap(i, l - n - 1);
-    }
-}
-
-pub struct Freecell {
-    pub homecell: [Hand; 4],
-    pub freecell: [Option<Card>; 4],
-    pub field: [Hand; 8],
-}
-
-impl Default for Freecell {
-    fn default() -> Self {
-        Self {
-            homecell: [
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-            ],
-            freecell: [
-                None,
-                None,
-                None,
-                None,
-            ],
-            field: [
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-                Hand::new(),
-            ],
-        }
-    }
-}
-
-impl Freecell {
-    pub fn new() -> Self { Self::default() }
-
-    //pub fn from_deck(deck: &mut Deck) -> Self {
-    //    let mut board: Self = Self::new();
-    //    board.deal_from(deck);
-    //    board
-    //}
-//
-    //pub fn deal_from(&mut self, deck: &mut Deck) {
-    //    for
-    //    //TODO loop over deck and deal to fields
-    //}
-
-    pub fn get_homecell_topcard(&self, cell: usize) -> Option<Card> {
-        let l = self.homecell[cell].len();
-        if l > 0 {
-            Some(self.homecell[cell].cards[l-1])
-        } else {
-            None
-        }
-    }
-
-    pub fn get_freecell_card(&self, cell: usize) -> Option<Card> {
-        return self.freecell[cell]
-    }
-
-    pub fn get_field_card_at(&self, field: usize, depth: usize) -> Option<Card> {
-        if self.field[field].len() > depth {
-            Some(self.field[field].cards[depth])
-        } else {
-            None
-        }
-    }
-
-    pub fn show_homecell(&self, i: usize) -> Option<String> {
-        if self.homecell[i].len() > 0 {
-            Some(self.homecell[i].cards[0].to_str().clone())
-        } else {
-            None
-        }
-    }
-
-    pub fn show_freecell(&self, i: usize) -> Option<String> {
-        match self.freecell[i] {
-            Some(x) => Some(x.to_str().clone()),
-            None => None,
-        }
-    }
-
-    pub fn show_field(&self, i: usize, j: usize) -> Option<String> {
-        if self.field[i].len() > j {
-            Some(self.field[i].cards[j].to_str().clone())
-        } else {
-            None
-        }
     }
 }
 
