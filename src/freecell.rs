@@ -4,6 +4,7 @@ pub struct Freecell {
     pub homecell: [Hand; 4],
     pub freecell: [Option<Card>; 4],
     pub field: [Hand; 8],
+    pub curdeal: usize,
 }
 
 impl Default for Freecell {
@@ -31,6 +32,7 @@ impl Default for Freecell {
                 Hand::new(),
                 Hand::new(),
             ],
+            curdeal: 0,
         }
     }
 }
@@ -48,6 +50,12 @@ impl Freecell {
     //    for
     //    //TODO loop over deck and deal to fields
     //}
+
+    pub fn deal_one(&mut self, deck: &mut Deck) {
+        let n = deck.deal_to_hand(&mut self.field[self.curdeal % 8], 1);
+        assert_eq!(n, 1);
+        self.curdeal += 1
+    }
 
     pub fn get_homecell_topcard(&self, cell: usize) -> Option<Card> {
         let l = self.homecell[cell].len();

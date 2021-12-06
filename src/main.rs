@@ -4,6 +4,7 @@ use deckofcards::*;
 use rand::prelude::*;
 use rand_pcg::Pcg64;
 use crate::freecell::*;
+use colored::*;
 
 // Seedable RNGs... "A simple number" looks pretty good
 // https://rust-random.github.io/book/guide-seeding.html
@@ -19,9 +20,37 @@ fn predictable_shuffle(cards: &mut [Card], seed: u64) {
     }
 }
 
+fn suit_to_uc_outline(suit: &Suit) -> char {
+    match suit {
+        deckofcards::Suit::Hearts => '♥',
+        deckofcards::Suit::Spades => '♠',
+        deckofcards::Suit::Diamonds => '♦',
+        deckofcards::Suit::Clubs => '♣',
+    }
+}
+
+fn suit_to_uc_fill(suit: &Suit) -> char {
+    match suit {
+        deckofcards::Suit::Hearts => '♥',
+        deckofcards::Suit::Spades => '♠',
+        deckofcards::Suit::Diamonds => '♦',
+        deckofcards::Suit::Clubs => '♣',
+    }
+}
+
+fn show_card(card: &Card) -> String {
+    // TODO: cli display configuration
+    let disp = format!("{}{}", card.rank.to_char(), suit_to_uc_fill(&card.suit));
+    if card.is_hearts() || card.is_diamonds() {
+        disp.red().to_string()
+    } else {
+        disp
+    }
+}
+
 fn card_to_str_or(maybe: Option<Card>, def: &str) -> String{
     match maybe {
-        Some(card) => card.to_str().clone(),
+        Some(card) => show_card(&card),
         None => String::from(def)
     }
 }
@@ -62,29 +91,6 @@ fn print_freecell_board(board: &Freecell) {
     }
 }
 
-fn suit_to_uc_outline(suit: &Suit) -> char {
-    match suit {
-        deckofcards::Suit::Hearts => '♥',
-        deckofcards::Suit::Spades => '♠',
-        deckofcards::Suit::Diamonds => '♦',
-        deckofcards::Suit::Clubs => '♣',
-    }
-}
-
-fn suit_to_uc_fill(suit: &Suit) -> char {
-    match suit {
-        deckofcards::Suit::Hearts => '♥',
-        deckofcards::Suit::Spades => '♠',
-        deckofcards::Suit::Diamonds => '♦',
-        deckofcards::Suit::Clubs => '♣',
-    }
-}
-
-fn show_card(card: &Card) -> String {
-    // TODO: cli display configuration
-    format!("{}{}", card.rank.to_char(), suit_to_uc_fill(&card.suit))
-}
-
 fn main() {
 
     // Create a new deck of cards
@@ -100,5 +106,8 @@ fn main() {
 
     let mut board = Freecell::new();
 
-    print_freecell_board(&board)
+    while deck.cards().len() > 0 {
+        board.deal_one(&mut deck);
+        print_freecell_board(&board)
+    }
 }
