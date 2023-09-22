@@ -28,17 +28,8 @@ enum State {
     Playing,
 }
 
-fn suit_to_uc_fill(suit: &Suit) -> char {
-    match suit {
-        deckofcards::Suit::Hearts => '♥',
-        deckofcards::Suit::Spades => '♠',
-        deckofcards::Suit::Diamonds => '♦',
-        deckofcards::Suit::Clubs => '♣',
-    }
-}
-
 fn show_card(card: &Card) -> String {
-    format!("{}{}", card.rank.to_char(), suit_to_uc_fill(&card.suit))
+    format!("{}{}", card.rank.to_char(), &card.suit.to_unicode())
 }
 
 fn style_card(card: &Card) -> Style {
